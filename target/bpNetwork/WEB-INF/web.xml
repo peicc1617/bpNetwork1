@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app id="starter" version="2.4" 
+         xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+   <servlet>
+        <servlet-name>spring</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>/WEB-INF/spring-servlet.xml</param-value>
+        </init-param>
+    </servlet>
+    
+    
+	 <display-name>神经网络</display-name>
+	<!--填写属性标签，为集成与融合做准备-->
+	   <context-param>
+	      <param-name>webAppAttributeLabel</param-name>
+	      <param-value>神经网络预测</param-value>
+	   </context-param>
+	   <!--功能描述，描述软件的主要功能-->
+	   <context-param>
+	      <param-name>webAppDescription</param-name>
+	      <param-value>这是神经网络App，主要基于BP算法进行预测</param-value>
+	   </context-param>
+	   <!--webApp图标，从静态资源中选择图片，将图片单独发给我-->
+	   <context-param>
+	      <param-name>webAppIcon</param-name>
+	      <param-value>创新方法管理平台.png</param-value>
+	   </context-param>
+	   <!--webApp版本号，当前软件版本迭代次数-->
+	   <context-param>
+	      <param-name>webAppVersion</param-name>
+	      <param-value>v5.0</param-value>
+	   </context-param>
+	   <!--webApp分类，从知识工程、TRIZ、质量分析、企业管理、产品设计、创新思维、其他选择一项-->
+	   <context-param>
+      <param-name>webAppCategory</param-name>
+      <param-value>企业管理</param-value>
+   </context-param>
+   
+    <servlet-mapping>
+        <servlet-name>spring</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+   
+    <!-- Welcome file lists -->
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+
+</web-app>

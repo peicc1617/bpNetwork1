@@ -1,0 +1,507 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>创新方法工作平台</title>
+<!--添加页面框架-->
+<link rel="import" id="frame"
+	href="/webresources/common/html/appFrame.html">
+<script type="text/javascript" src="js/buttonAction.js"></script>
+
+<!--  支持bootstrap-table的js、css -->
+<link rel="stylesheet" href="./bootstrap/bootstrap-table/bootstrap-table.css">
+<script type="text/javascript" src="./ace-master/assets/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="./bootstrap/bootstrap-table/bootstrap-table.js"></script>
+<script type="text/javascript" src="./bootstrap/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+
+
+<script type="text/javascript" src="./ace-master/assets/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="./ace-master/assets/js/jquery.dataTables.bootstrap.min.js"></script>
+<script type="text/javascript"  src="./ace-master/assets/js/ace-elements.min.js"></script>
+
+<script type="text/javascript"  src="./ace-master/assets/js/bootstrap-editable.min.js"></script>
+
+<link rel="stylesheet" href="./ace-master/assets/css/bootstrap-editable.min.css">
+
+<link rel="stylesheet" href="./css/progressbar.css" />
+
+<script type="text/javascript" src="./js/netConfig.js"></script>
+<script type="text/javascript" src="./js/tableEdit.js"></script>
+<script type="text/javascript" src="./js/netTrain.js"></script>
+<!-- <script type="text/javascript" src="./js/projectEdit.js"></script>
+ -->
+<script type="text/javascript" src="./js/echarts/echarts.min.js"></script>
+
+
+</head>
+<body class="no-skin">
+
+	<!--添加多个分页-->
+	<div id="myCustomLi">
+		<li role="presentation" class="active"><a href="#home" id="hometab" aria-controls="home" role="tab" data-toggle="tab">
+			<i class="glyphicon glyphicon-home"></i> 网络配置</a></li>
+		<li role="presentation"><a href="#analysis" id="analysistab" aria-controls="analysis" role="tab" data-toggle="tab" onclick="generateTable()">
+			<i class="glyphicon glyphicon-cog"></i> 训练集输入</a></li>
+		<li role="presentation"><a href="#analysisRes" id="analysisRestab" aria-controls="analysisRes" role="tab" data-toggle="tab">
+			<i class="glyphicon glyphicon-th"></i> 进行预测</a></li>
+
+	</div>
+	<div id="myCustomTab"> 
+		<div role="tabpanel" class="tab-pane active" id="home">
+		
+		<div class="row">
+			<div class="col-xs-1 col-sm-1">
+			</div>
+			<div class="col-xs-8 col-sm-8 ">
+				<div class="tab-content padding-8">
+						<h4 class="smaller lighter green">
+							<i class="ace-icon fa fa-list"></i>
+							输入配置
+							<button type="button" class="btn btn-info" onclick="addInputElement()" style="position: relative; float: right;">
+								<i class="glyphicon glyphicon-plus"></i> 添加输入因素
+							</button>
+							
+						</h4>
+						<br>
+						<ul id="inputs" class="item-list ui-sortable">
+							<li class="item-blue clearfix ui-sortable-handle" style="position: relative; opacity: 1; left: 0px; top: 0px; z-index: auto;">
+								<label class="inline">
+											<span class="editable editable-click editable-open">输入1</span>
+
+								</label>
+		
+								<div class="pull-right action-buttons">
+		
+									<a href="#" class="red" onclick="deleteElement(this)">
+										<i class="ace-icon fa fa-trash-o bigger-130"></i>
+									</a>
+									<span class="vbar"></span>
+								</div>
+							</li>
+							
+							<li class="item-blue clearfix ui-sortable-handle" style="position: relative; opacity: 1; left: 0px; top: 0px; z-index: auto;">
+								<label class="inline">
+											<span class="editable editable-click editable-open">输入2</span>
+
+								</label>
+		
+								<div class="pull-right action-buttons">
+		
+									<a href="#" class="red" onclick="deleteElement(this)">
+										<i class="ace-icon fa fa-trash-o bigger-130"></i>
+									</a>
+									<span class="vbar"></span>
+								</div>
+							</li>
+							
+						</ul>
+				</div>	
+			
+			</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-xs-1 col-sm-1">
+				</div>
+				<div class="col-xs-8 col-sm-8 ">
+					<div class="tab-content padding-8">
+							<h4 class="smaller lighter green">
+								<i class="ace-icon fa fa-list"></i>
+								输出配置
+								<!-- <button type="button" class="btn btn-info" onclick="addOutputElement()" style="position: relative; float: right;">
+									<i class="glyphicon glyphicon-plus"></i> 添加输出因素
+								</button> -->
+								
+							</h4>
+							<br>
+							<ul id="outputs" class="item-list ui-sortable">
+								<li class="item-red clearfix ui-sortable-handle" style="position: relative; opacity: 1; left: 0px; top: 0px; z-index: auto;">
+									<label class="inline">
+												<span class="editable editable-click editable-open">输出1</span>
+									</label>
+								</li>
+								
+							</ul>
+					</div>	
+				
+				</div>
+			
+			</div>			
+			
+		</div>
+
+
+		<div class="tab-pane" id="analysis">
+				<div id="toolbar" class="btn-group btn-group-sm">
+				<button type="button" class="btn btn-info" onclick="addrow()">
+					<i class="glyphicon glyphicon-plus"></i> 添加
+				</button>
+				<button type="button" class="btn btn-info"
+					style="margin-right: 40px" onclick="deleterow()">
+					<i class="glyphicon glyphicon-trash"></i> 删除
+				</button>
+				<!-- <button type="button" class="btn btn-info"
+					onclick="downloadexcel()">
+					<i class="glyphicon glyphicon-download"> 文件模板下载</i>
+				</button>
+				<button type="button" class="btn btn-info" onclick="addExcel()">
+					<i class="glyphicon glyphicon-import"> 文件导入</i>
+				</button> -->
+
+				<button type="button" class="btn btn-info" id="saveProject"
+					value="false" style="align: right" onclick="saveProject()">
+					<i class="glyphicon glyphicon-cloud"> 保存工程1</i>
+				</button>
+				
+				<button type="button" class="btn btn-info" data-toggle="modal" data-target="#saveAsModal" id="saveAsProject"
+					value="false" style="align: right" >
+					<i class="glyphicon glyphicon-cloud"> 另存为1</i>
+				</button>
+			</div>
+			<table id="myBootstrapTtable" 
+				data-height=750 
+				data-search="true" 
+				data-show-refresh="true" 
+				data-show-toggle="true"
+				data-toolbar="#toolbar" 
+				 data-pagination="true" 
+				 data-page-size=30
+				data-page-list=[10,30,50,All] 
+				data-side-pagination="client" >
+			</table>
+		
+		</div>
+
+		<div role="tabpanel" class="tab-pane" id="analysisRes">
+		
+		
+			<div id="toolbarRes" class="btn-group">
+				
+				<h4 style="padding-left:10px">神经网络配置</h4>
+						<div class="col-lg-5">
+							<div class="input-group">
+								<span class="input-group-addon">各层网络节点数</span> 
+								<input type="text" class="form-control" id="nodes" value="10,6">
+							</div>
+						</div> 
+						
+						<br><br>
+						<div class="col-lg-5">
+							<div class="input-group">
+								<span class="input-group-addon">迭代次数</span> 
+								<input type="text" class="form-control" id="iterator" value="2000">
+							</div>
+						</div> 
+						
+						<div class="col-lg-5">
+							<div class="input-group">
+								<span class="input-group-addon">误差</span> 
+								<input type="text" class="form-control" id="error" value="0.0001">
+							</div>
+						</div> 
+						<br><br>
+						<div class="col-lg-5">
+							<div class="input-group">
+								<span class="input-group-addon">学习率</span> 
+								<input type="text" class="form-control" id="learnRate" value="0.8">
+							</div>
+						</div> 
+						
+						<div class="col-lg-5">
+							<div class="input-group">
+								<span class="input-group-addon">动量系数</span> 
+								<input type="text" class="form-control" id="mobp" value="0.15">
+							</div>
+						</div> 
+						
+						<br><br>
+						<div class="col-lg-5">
+							<button type="button" class="btn btn-info" onclick="netTrain()">
+									<i class="glyphicon glyphicon-plus"></i> 网络训练
+							</button>
+						</div> 
+						
+					<br><br>
+					<div id="predictdiv" style="display:none">
+					
+					</div>
+			</div>
+		</div>
+
+	</div>
+
+
+
+
+
+
+	<!-- Modal  添加训练数据 -->
+	<div class="modal fade" id="itemAdd" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">添加训练数据</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row" id="inputItemAdd">
+						<!-- <h5 style="padding-left:10px">网络输入数据</h5>
+						<div class="col-lg-6">
+							<div class="input-group">
+								<span class="input-group-addon">工序名称</span> 
+								<input type="text" class="form-control" id="procedureName">
+							</div>
+						</div> -->
+					</div>
+					<br>
+					<div class="row" id="outputItemAdd">
+					
+					</div>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary" onclick="addItem()">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+	<!-- Modal  修改工序信息-->
+	<div class="modal fade" id="itemEdit" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">修改输入数据</h4>
+				</div>
+				<div class="modal-body">
+					<br>
+					<div class="row" id="dataEditGroup">
+						<div class="col-lg-6">
+							<div class="input-group">
+								<span class="input-group-addon">工序名称</span> <input type="text"
+									class="form-control" id="procedureName1" value=""
+									aria-label="...">
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="input-group">
+								<span class="input-group-addon">工作站</span> <input type="text"
+									class="form-control" id="workstationName1" value=""
+									aria-label="...">
+							</div>
+						</div>
+						<br> <br>
+					</div>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary" onclick="editItem()">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Modal  上传文件-->
+	<div class="modal fade" id="fileupload" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">导入文件</h4>
+				</div>
+				<div class="modal-body">
+					<br>
+					<form id="excelfile" action="processExcel" method="post"
+						enctype="multipart/form-data" target="iframeInfo">
+						<input id="process-excel" accept="application/vnd.ms-excel"
+							type="file" name='excel' value=""
+							style="float: left; width: 200px" /> <input type="submit"
+							id="import_button" class="btn btn-xs btn-primary"
+							style="float: left; width: 80px" value="导入"
+							onclick="initAjaxForm()" />
+					</form>
+					<br> <br> <br>
+
+					<div id="loader"
+						style="position: relative; left: 120px; display: none">
+						<span style="font-size: 16px">数据处理中</span> <img
+							src="./css/images/loader.gif" class="loading" />
+					</div>
+					<div id="loadfinish"
+						style="position: relative; left: 160px; display: none">
+						<span style="font-size: 16px">完成</span> <img
+							src="./css/images/ok.png" class="loading" />
+					</div>
+
+				</div>
+				<div class="modal-footer">
+					<!--  <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button> -->
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+	<!-- Modal -->
+	<div class="modal fade" id="waitForTrain" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel1">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">等待训练完成...</h4>
+				</div>
+				<div class="modal-body">
+					<div id="waiting" style="display: none">
+						<div style="text-align: center">
+							<span style="font-size: 20px">网络训练中</span> <img
+								src="./css/images/loader.gif" class="loading" />
+						</div>
+					</div>
+					<div id="completed" style="display: none">
+						
+						<h4 class="modal-title" >收敛过程</h4>
+						<div id="progressGraph" style="width: 550px; height: 400px"></div>
+						
+						<div style="text-align: right">
+							<button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+							<button type="button" class="btn btn-primary" onclick="showPredictInfo()">确定</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	
+	
+	<!-- Modal 保存工程-->
+	 <div class="modal fade" id="inputProjectName" tabindex="-1" role="dialog"
+		aria-labelledby="inputProjectName">
+		
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">保存工程</h4>
+				</div>
+				<div class="modal-body">
+					<ul>
+						<li class="active">
+							<h5>请输入工程名称</h5>
+							<input type="text" class="form-control" id="projectName" />
+						</li>
+					</ul>
+					
+					<ul>
+						<li class="active">
+							<h5>备注信息</h5>
+							<input type="text" class="form-control" id="memoInfo" />
+						</li>
+					</ul>
+				
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary" onclick="save2DataBase()">确定</button>
+				</div>
+			</div>
+		</div>
+	
+	</div>
+
+
+
+<div class="modal fade" id="saveAsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+			<div class="modal-content">
+				  <div class="modal-header">
+						<h4 class="modal-title" id="newProjectModalTitle">
+							  另存为
+						</h4>
+				  </div>
+				  <div class="modal-body">
+						<!-- <%--输入框组--%> -->
+						<div class="input-group">
+							  <span class="input-group-addon">项目名：</span>
+							  <input type="text" class="form-control" placeholder="请输入项目名称" id="saveAsProjectNameModal">
+						</div>
+						<br>
+						<div class="input-group">
+							  <span class="input-group-addon">备 注：</span>
+							  <input type="text" class="form-control" placeholder="请输入备注" id="saveAsProjectRemarkModal">
+						</div>
+						<br>
+				  </div>
+				  <div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+						</button>
+						<button type="button" class="btn btn-primary" onclick="saveAsProject()" id="saveAsProButton">
+							  确认
+						</button>
+				  </div>
+			</div>
+	  </div>
+</div>
+
+
+	<!--帮助页面-->
+	<div id="helpHtml">
+	  <div class="page-header">
+			<h1>
+				  神经网络使用说明
+			</h1>
+	  </div>
+	  <div class="alert alert-block alert-success" id="appHelp">
+			<div class="helpClass">
+				  <p class="helpP">
+						<i class="ace-icon fa fa-check green"></i>
+						<strong><big>使用流程：</big></strong><br/>
+						<strong>1、神经网络输入和输出配置</strong><br/>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1）建立工程项目<br/>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="./files/helpImg/step1.png" width="500px" height="200px"><br/>
+						
+						<strong>2、训练集输入</strong><br/>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="./files/helpImg/step2.png" width="500px" height="250px"><br/>
+						<strong>3、神经网络配置与网络训练</strong><br/>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="./files/helpImg/step3.png" width="500px" height="100px"><br/>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="./files/helpImg/step4.png" width="500px" height="300px"><br/>
+						
+						<strong>4、预测输出</strong><br/>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="./files/helpImg/step5.png" width="500px" height="100px"><br/>
+						<strong>5、注意事项</strong><br/>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.神经网络节点数配置的时间，只需要配置隐含层节点个数，输入和输出层不需配置，自动匹配；<br/>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.如果神经网络收敛不理想，可以通过参数调整让算法有更好的收敛；<br/>
+				  <p>
+			</div>
+	  </div>
+</div>
+
+</body>
+</html>
